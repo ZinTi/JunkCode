@@ -1,0 +1,209 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公积金管理系统 - 控制面板</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- 顶部标题和面包屑 -->
+    <div class="content-header">
+        <div class="header-left">
+            <h1 class="page-title">控制面板</h1>
+            <div class="breadcrumb">
+                <div class="breadcrumb-item">首页</div>
+                <div class="breadcrumb-item active">控制面板</div>
+            </div>
+        </div>
+        <div class="system-info" id="systemInfo">
+            <span class="project-name">GJJ-ContributionModule</span>
+            <span class="version">v1.0.0</span>
+        </div>
+    </div>
+
+    <!-- 欢迎面板 -->
+    <div class="welcome-panel">
+        <div class="welcome-text">
+            <div class="welcome-title">您好, <span id="welcomeNickname">超级管理员</span>!</div>
+            <div class="welcome-subtitle">欢迎使用公积金管理系统筹资子系统，您可以通过左侧菜单管理公积金相关业务。系统为您提供了单位开户、个人开户、缴存登记等核心功能。</div>
+            <div class="system-health">
+                <div class="health-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 6L9 17L4 12" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>系统运行正常</span>
+                </div>
+                <div class="health-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#3498db" stroke-width="2"/>
+                        <path d="M12 6V12L16 14" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="systemTime">2025-07-02 07:50:44</span>
+                </div>
+            </div>
+        </div>
+        <div class="welcome-image">
+            <svg width="180" height="180" viewBox="0 0 200 200">
+                <defs>
+                    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4a69bd" />
+                        <stop offset="100%" stop-color="#1e3799" />
+                    </linearGradient>
+                    <linearGradient id="windowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ecf0f1" />
+                        <stop offset="100%" stop-color="#bdc3c7" />
+                    </linearGradient>
+                    <radialGradient id="circleGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" stop-color="#3498db" />
+                        <stop offset="100%" stop-color="#2980b9" />
+                    </radialGradient>
+                </defs>
+                <rect x="30" y="50" width="140" height="100" rx="10" fill="url(#buildingGradient)" stroke="#1e3799" stroke-width="3"/>
+                <rect x="50" y="70" width="100" height="60" rx="5" fill="url(#windowGradient)"/>
+                <circle cx="100" cy="100" r="25" fill="url(#circleGradient)"/>
+                <path d="M95 95 L105 95 L105 105 L95 105 Z" fill="#2c3e50"/>
+                <rect x="40" y="40" width="120" height="10" rx="5" fill="#2c3e50"/>
+                <rect x="70" y="30" width="60" height="10" rx="5" fill="#2c3e50"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- 统计卡片区域 -->
+    <div class="dashboard-cards">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24">
+                        <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 4C17.7956 4 18.5587 4.31607 19.1213 4.87868C19.6839 5.44129 20 6.20435 20 7C20 7.79565 19.6839 8.55871 19.1213 9.12132C18.5587 9.68393 17.7956 10 17 10C16.2044 10 15.4413 9.68393 14.8787 9.12132C14.3161 8.55871 14 7.79565 14 7C14 6.20435 14.3161 5.44129 14.8787 4.87868C15.4413 4.31607 16.2044 4 17 4Z" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="card-title">系统用户</div>
+            </div>
+            <div class="card-value">42</div>
+            <div class="card-desc">已注册的系统用户数量</div>
+            <div class="card-progress">
+                <div class="progress-bar" style="width: 75%; background: linear-gradient(90deg, #3498db, #1abc9c);"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24">
+                        <path d="M19 21V5C19 3.89543 18.1046 3 17 3H7C5.89543 3 5 3.89543 5 5V21M19 21L21 21M19 21H14M5 21L3 21M5 21H10" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 7H15" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 11H15" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 15H13" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="card-title">单位客户</div>
+            </div>
+            <div class="card-value">1,248</div>
+            <div class="card-desc">已开户的单位公积金账户</div>
+            <div class="card-progress">
+                <div class="progress-bar" style="width: 85%; background: linear-gradient(90deg, #27ae60, #2ecc71);"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24">
+                        <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#e74c3c" stroke-width="2"/>
+                        <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#e74c3c" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="card-title">个人客户</div>
+            </div>
+            <div class="card-value">24,563</div>
+            <div class="card-desc">已开户的个人公积金账户</div>
+            <div class="card-progress">
+                <div class="progress-bar" style="width: 92%; background: linear-gradient(90deg, #e74c3c, #e67e22);"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近操作记录 -->
+    <div class="recent-activity">
+        <div class="section-header">
+            <h2 class="section-title">最近操作记录</h2>
+            <div class="view-all">查看全部</div>
+        </div>
+        <ul class="activity-list">
+            <li class="activity-item">
+                <div class="activity-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#3498db" stroke-width="2"/>
+                        <path d="M12 6V12L16 14" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">成功处理单位汇缴业务</div>
+                    <div class="activity-desc">单位：ABC科技有限公司 | 金额：¥42,568.00</div>
+                    <div class="activity-time">2025-07-01 10:23:45</div>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#27ae60" stroke-width="2"/>
+                        <path d="M8 12H16" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 16V8" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">新增个人公积金账户</div>
+                    <div class="activity-desc">姓名：张三 | 身份证：320***19900101XXXX</div>
+                    <div class="activity-time">2025-07-01 09:45:12</div>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="#f39c12" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">更新单位资料信息</div>
+                    <div class="activity-desc">单位：XYZ制造有限公司 | 更新内容：注册资本变更</div>
+                    <div class="activity-time">2025-06-30 16:30:22</div>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M15 16L17 18L21 14" stroke="#9b59b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 12H16" stroke="#9b59b6" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 8V16" stroke="#9b59b6" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">完成基数变更审批</div>
+                    <div class="activity-desc">单位：DEF服务集团 | 新基数：¥12,500.00</div>
+                    <div class="activity-time">2025-06-30 14:15:33</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="footer">
+        <div class="footer-left">
+            <span>© <span id="copyrightYear">2025</span> 公积金管理系统筹资子系统</span>
+            <span>授权协议：GPLv3</span>
+        </div>
+        <div class="footer-right">
+            <span id="lastUpdated">最后更新: 2025-07-02 07:50:44</span>
+        </div>
+    </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

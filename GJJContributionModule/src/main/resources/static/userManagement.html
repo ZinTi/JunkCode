@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公积金管理系统 - 用户管理</title>
+    <link rel="stylesheet" href="css/userManagement.css">
+</head>
+<body>
+<!-- 主内容区域 -->
+<main class="main-content">
+    <div class="content-header">
+        <h1 class="page-title">系统用户管理</h1>
+        <div class="breadcrumb">
+            <div class="breadcrumb-item">首页</div>
+            <div class="breadcrumb-item">系统用户管理</div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="输入用户ID或用户名...">
+            <button class="search-button" id="searchButton">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="white" stroke-width="2"/>
+                    <path d="M21 21L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="addUserBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                新增用户
+            </button>
+            <button class="btn btn-danger" id="refreshBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 11C19.7348 9.91733 19.2009 8.91708 18.4467 8.08322C17.6925 7.24936 16.7416 6.60904 15.6792 6.21964C14.6168 5.83024 13.4763 5.70466 12.3547 5.85415C11.2331 6.00364 10.1663 6.42314 9.25 7.07L5 11M5 11V7M5 11H9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 13C4.26516 14.0827 4.79912 15.0829 5.5533 15.9168C6.30749 16.7506 7.25839 17.391 8.32079 17.7804C9.38319 18.1698 10.5237 18.2953 11.6453 18.1459C12.7669 17.9964 13.8337 17.5769 14.75 16.93L19 13M19 13V17M19 13H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                刷新列表
+            </button>
+        </div>
+    </div>
+
+    <div class="users-table-container">
+        <table class="users-table">
+            <thead>
+            <tr>
+                <th>用户ID</th>
+                <th>用户名</th>
+                <th>昵称</th>
+                <th>邮箱</th>
+                <th>电话</th>
+                <th>性别</th>
+                <th>用户类型</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="usersTableBody">
+            <!-- 用户数据将通过JavaScript动态加载 -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" id="pagination">
+        <!-- 分页按钮将通过JavaScript动态生成 -->
+    </div>
+</main>
+
+<!-- 新增/编辑用户模态框 -->
+<div class="modal" id="userModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">新增用户</h3>
+            <button class="close-btn" id="closeModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="usernameInput">用户名 *</label>
+                            <input type="text" class="form-control" id="usernameInput" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="passwordInput">密码 *</label>
+                            <input type="password" class="form-control" id="passwordInput" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="nicknameInput">昵称 *</label>
+                            <input type="text" class="form-control" id="nicknameInput" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="emailInput">邮箱 *</label>
+                            <input type="email" class="form-control" id="emailInput" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="telephoneInput">电话 *</label>
+                            <input type="tel" class="form-control" id="telephoneInput" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label class="form-label" for="genderSelect">性别 *</label>
+                            <select class="form-control" id="genderSelect" required>
+                                <option value="">请选择性别</option>
+                                <option value="Male">男</option>
+                                <option value="Female">女</option>
+                                <option value="Unknown">未知</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="userTypeSelect">用户类型 *</label>
+                    <select class="form-control" id="userTypeSelect" required>
+                        <option value="">请选择用户类型</option>
+                        <option value="admin">管理员</option>
+                        <option value="teller">柜员</option>
+                        <option value="suspended">已停用</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="cancelBtn">取消</button>
+            <button class="btn btn-primary" id="saveUserBtn">保存</button>
+        </div>
+    </div>
+</div>
+
+<!-- 加载指示器 -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- 提示信息 -->
+<div class="toast" id="toast"></div>
+
+<script src="js/userManagement.js"></script>
+</body>
+</html>

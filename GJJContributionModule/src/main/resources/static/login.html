@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公积金管理系统 - 登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #4a69bd 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .login-header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .login-header p {
+            font-size: 16px;
+            opacity: 0.85;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .auth-type-toggle {
+            display: flex;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(30, 55, 153, 0.15);
+        }
+
+        .auth-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background-color: #f0f4f8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .auth-option.active {
+            background-color: #2a5298;
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            width: 20px;
+            height: 20px;
+            z-index: 2;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+
+        .input-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background-color: white;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(30, 60, 114, 0.2);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #2a5298, #3a66c0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 60, 114, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #e53e3e;
+            text-align: center;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            background-color: #fff5f5;
+            display: none;
+            font-size: 15px;
+            border: 1px solid #fc8181;
+        }
+
+        .system-info {
+            text-align: center;
+            margin-top: 25px;
+            color: #718096;
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(42, 82, 152, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(42, 82, 152, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(42, 82, 152, 0); }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                max-width: 100%;
+            }
+
+            .login-body {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-header">
+        <h1>公积金管理系统</h1>
+        <p>欢迎使用，请登录您的账户</p>
+    </div>
+
+    <div class="login-body">
+        <div class="auth-type-toggle">
+            <div class="auth-option active" data-type="userId">用户ID登录</div>
+            <div class="auth-option" data-type="username">用户名登录</div>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="credential" id="credentialLabel">用户ID</label>
+                <div class="input-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#4A5568" stroke-width="2"/>
+                        <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#4A5568" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <input type="text" id="credential" class="input-field" placeholder="请输入您的用户ID" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">密码</label>
+                <div class="input-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15V17" stroke="#4A5568" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 11C5 8.17157 5 6.75736 5.87868 5.87868C6.75736 5 8.17157 5 11 5H13C15.8284 5 17.2426 5 18.1213 5.87868C19 6.75736 19 8.17157 19 11V16C19 18.8284 19 20.2426 18.1213 21.1213C17.2426 22 15.8284 22 13 22H11C8.17157 22 6.75736 22 5.87868 21.1213C5 20.2426 5 18.8284 5 16V11Z" stroke="#4A5568" stroke-width="2"/>
+                        <path d="M7 11H17" stroke="#4A5568" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <input type="password" id="password" class="input-field" placeholder="请输入您的密码" required>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <button type="submit" class="login-btn pulse">登 录</button>
+        </form>
+
+        <div class="system-info">
+            公积金管理系统 v1.0 © 2025 版权所有
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM元素
+    const authOptions = document.querySelectorAll('.auth-option');
+    const credentialLabel = document.getElementById('credentialLabel');
+    const credentialInput = document.getElementById('credential');
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // 登录方式切换
+    authOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            authOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+
+            if (option.dataset.type === 'userId') {
+                credentialLabel.textContent = '用户ID';
+                credentialInput.placeholder = '请输入您的用户ID';
+            } else {
+                credentialLabel.textContent = '用户名';
+                credentialInput.placeholder = '请输入您的用户名';
+            }
+        });
+    });
+
+    // 表单提交处理
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // 获取表单数据
+        const authType = document.querySelector('.auth-option.active').dataset.type;
+        const credential = credentialInput.value.trim();
+        const password = document.getElementById('password').value;
+
+        // 显示加载状态
+        const loginBtn = document.querySelector('.login-btn');
+        const originalBtnText = loginBtn.textContent;
+        loginBtn.textContent = '登录中...';
+        loginBtn.disabled = true;
+
+        try {
+            // 发送登录请求
+            const response = await fetch('/api/auth/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    authType: authType,
+                    credential: credential,
+                    password: password,
+                    captcha: "123" // 固定验证码值
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.result) {
+                // 登录成功 - 修改后的存储逻辑
+                // 将用户数据的各个字段分别存储到sessionStorage
+                const userData = result.data;
+                sessionStorage.setItem('sessionId', userData.sessionId);
+                sessionStorage.setItem('userId', userData.userId);
+                sessionStorage.setItem('username', userData.username);
+                sessionStorage.setItem('nickname', userData.nickname);
+                sessionStorage.setItem('gender', userData.gender);
+                sessionStorage.setItem('userType', userData.userType);
+
+                // 跳转到主页
+                window.location.href = 'index.html';
+            } else {
+                // 登录失败
+                showError(result.message || '登录失败，请重试');
+            }
+        } catch (error) {
+            showError('网络错误，请检查连接');
+            console.error('登录请求失败:', error);
+        } finally {
+            // 恢复按钮状态
+            loginBtn.textContent = originalBtnText;
+            loginBtn.disabled = false;
+        }
+    });
+
+    // 显示错误信息
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+
+        // 3秒后自动隐藏错误消息
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 3000);
+    }
+
+    // 示例UUID格式的用户ID
+    credentialInput.addEventListener('focus', () => {
+        if (!credentialInput.value) {
+            if (document.querySelector('.auth-option.active').dataset.type === 'userId') {
+                credentialInput.value = '0d6ec771-8ee7-4585-9226-4cdf1a3f6e58';
+            } else {
+                credentialInput.value = 'root';
+            }
+        }
+    });
+</script>
+</body>
+</html>

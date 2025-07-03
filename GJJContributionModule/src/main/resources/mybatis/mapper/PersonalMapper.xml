@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gjj.mapper.PersonalMapper">
+
+    <resultMap id="personalBaseInfoResultMap" type="com.gjj.entity.Personal">
+        <id property="personalAccNumber" column="personal_acc_number" />
+        <result property="unitAccNumber" column="unit_acc_number" />
+        <result property="openDate" column="open_date" jdbcType="DATE" />
+        <result property="fundBalance" column="fund_balance" />
+        <result property="accountStatus" column="account_status" />
+        <result property="depositBase" column="deposit_base" />
+        <result property="unitRatio" column="unit_ratio" />
+        <result property="personalRatio" column="personal_ratio" />
+        <result property="lastPaymentMonth" column="last_payment_month" />
+        <result property="unitMonthlyDue" column="unit_monthly_due" />
+        <result property="personalMonthlyDue" column="personal_monthly_due" />
+        <result property="annualPayment" column="annual_payment" />
+        <result property="annualWithdrawal" column="annual_withdrawal" />
+        <result property="annualInterest" column="annual_interest" />
+        <result property="institutionCode" column="institution_code" />
+        <result property="operator" column="operator" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.gjj.entity.Personal">
+        INSERT INTO personal (
+            personal_acc_number, unit_acc_number, open_date, fund_balance, account_status,
+            deposit_base, unit_ratio, personal_ratio, last_payment_month, unit_monthly_due, personal_monthly_due,
+            annual_payment, annual_withdrawal, annual_interest, institution_code, operator, remark)
+        VALUES
+        (
+            #{personalAccNumber}, #{unitAccNumber}, #{openDate, jdbcType=DATE}, #{fundBalance}, #{accountStatus},
+            #{depositBase}, #{unitRatio}, #{personalRatio},#{lastPaymentMonth}, #{unitMonthlyDue}, #{personalMonthlyDue},
+            #{annualPayment}, #{annualWithdrawal}, #{annualInterest}, #{institutionCode}, #{operator}, #{remark}
+        )
+    </insert>
+
+    <delete id="deleteByPersonalAccNumber" parameterType="string">
+        DELETE FROM personal WHERE personal_acc_number = #{personalAccNumber}
+    </delete>
+
+    <update id="update" parameterType="com.gjj.entity.Personal">
+        UPDATE personal SET
+              unit_acc_number = #{unitAccNumber},
+              open_date = #{openDate, jdbcType=DATE},
+              fund_balance = #{fundBalance},
+              account_status = #{accountStatus},
+              deposit_base = #{depositBase},
+              unit_ratio = #{unitRatio},
+              personal_ratio = #{personalRatio},
+              last_payment_month = #{lastPaymentMonth},
+              unit_monthly_due = #{unitMonthlyDue},
+              personal_monthly_due = #{personalMonthlyDue},
+              annual_payment = #{annualPayment},
+              annual_withdrawal = #{annualWithdrawal},
+              annual_interest = #{annualInterest},
+              institution_code = #{institutionCode},
+              operator = #{operator},
+              remark = #{remark}
+        WHERE personal_acc_number = #{personalAccNumber}
+    </update>
+
+    <update id="updateAccountStatus">
+        UPDATE personal SET account_status = #{accountStatus} WHERE personal_acc_number = #{personalAccNumber}
+    </update>
+
+    <select id="findByPersonalAccNumber" resultMap="personalBaseInfoResultMap">
+        SELECT * FROM personal WHERE personal_acc_number = #{personalAccNumber}
+    </select>
+
+    <select id="findByUnitAccNumber" resultMap="personalBaseInfoResultMap">
+        SELECT * FROM personal WHERE unit_acc_number = #{unitAccNumber}
+    </select>
+</mapper>

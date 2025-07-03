@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内部账号注册 | 公积金管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f1b5f, #1c7c7a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 680px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0f1b5f, #1c7c7a);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        h1 {
+            color: #0f1b5f;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .form-container {
+            position: relative;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: #444;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            border-color: #0f1b5f;
+            background: #fff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(15, 27, 95, 0.1);
+        }
+
+        input.error {
+            border-color: #e74c3c;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 5px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 11px;
+            margin-top: 2px;
+            height: 13px;
+        }
+
+        .button-container {
+            grid-column: span 2;
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(to right, #0f1b5f, #1c7c7a);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 9px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 160px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(15, 27, 95, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .response-container {
+            grid-column: span 2;
+            margin-top: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            border-left: 3px solid #0f1b5f;
+        }
+
+        .response-title {
+            font-weight: 600;
+            color: #0f1b5f;
+            margin-bottom: 5px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .response-title::before {
+            content: "▶";
+            margin-right: 5px;
+            font-size: 11px;
+        }
+
+        #apiResponse {
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #333;
+            background: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 180px;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        .password-strength {
+            height: 3px;
+            background: #eee;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .password-rules {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .system-footer {
+            text-align: center;
+            margin-top: 15px;
+            color: #777;
+            font-size: 11px;
+            grid-column: span 2;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .form-section {
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+        }
+
+        .section-title {
+            color: #0f1b5f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 8px;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 3px;
+            bottom: 3px;
+            width: 2px;
+            background: #0f1b5f;
+            border-radius: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .button-container {
+                grid-column: span 1;
+            }
+
+            .response-container {
+                grid-column: span 1;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-header">
+        <div class="logo">GJJ</div>
+        <div class="header-text">
+            <h1>内部账号注册</h1>
+            <p class="subtitle">公积金管理系统内部管理员注册页面</p>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <form id="adminRegisterForm">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <div class="form-section">
+                        <div class="section-title">账户信息</div>
+                        <label for="secretCode">注册邀请码</label>
+                        <input type="text" id="secretCode" name="secretCode" required placeholder="请输入系统分配的邀请码">
+                        <div class="error-message" id="secretCodeError"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required placeholder="设置登录用户名">
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname">姓名/昵称</label>
+                    <input type="text" id="nickname" name="nickname" required placeholder="请输入您的姓名">
+                    <div class="error-message" id="nicknameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">设置密码</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required placeholder="设置登录密码">
+                        <button type="button" class="password-toggle" id="togglePassword">显示</button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-meter" id="strengthMeter"></div>
+                    </div>
+                    <div class="password-rules">密码至少8位，包含字母和数字</div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="请再次输入密码">
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="form-section">
+                        <div class="section-title">联系信息</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" id="email" name="email" required placeholder="请输入工作邮箱">
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">手机号</label>
+                    <input type="tel" id="telephone" name="telephone" required placeholder="请输入手机号码">
+                    <div class="error-message" id="telephoneError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">性别</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">请选择性别</option>
+                        <option value="Male">男</option>
+                        <option value="Female">女</option>
+                        <option value="Unknown">未知</option>
+                    </select>
+                    <div class="error-message" id="genderError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userType">用户类型</label>
+                    <select id="userType" name="userType" required>
+                        <option value="">请选择用户类型</option>
+                        <option value="admin">管理员</option>
+                        <option value="teller">柜员</option>
+                        <option value="suspended">挂起账户</option>
+                    </select>
+                    <div class="error-message" id="userTypeError"></div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit">注册账号</button>
+                </div>
+
+                <div class="response-container">
+                    <div class="response-title">API 响应：</div>
+                    <pre id="apiResponse">等待提交数据...</pre>
+                </div>
+
+                <div class="system-footer">
+                    公积金管理系统内部使用 | 安全级别：高 | © 2025 版权所有
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('adminRegisterForm');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const strengthMeter = document.getElementById('strengthMeter');
+        const apiResponse = document.getElementById('apiResponse');
+
+        // 密码显示/隐藏切换
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '显示' : '隐藏';
+        });
+
+        // 密码强度检测
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            let strength = 0;
+
+            // 长度检测
+            if (password.length >= 8) strength += 25;
+            if (password.length >= 12) strength += 15;
+
+            // 包含数字
+            if (/\d/.test(password)) strength += 20;
+
+            // 包含小写字母
+            if (/[a-z]/.test(password)) strength += 10;
+
+            // 包含大写字母
+            if (/[A-Z]/.test(password)) strength += 15;
+
+            // 包含特殊字符
+            if (/[^A-Za-z0-9]/.test(password)) strength += 15;
+
+            // 更新强度条
+            strengthMeter.style.width = Math.min(strength, 100) + '%';
+
+            // 更新颜色
+            if (strength < 40) {
+                strengthMeter.style.backgroundColor = '#e74c3c';
+            } else if (strength < 70) {
+                strengthMeter.style.backgroundColor = '#f39c12';
+            } else {
+                strengthMeter.style.backgroundColor = '#2ecc71';
+            }
+        });
+
+        // 表单提交处理
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // 清除之前的错误信息
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('input, select').forEach(el => el.classList.remove('error'));
+
+            // 表单验证
+            let isValid = true;
+
+            // 密码匹配验证
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                showError('confirmPassword', '两次输入的密码不一致');
+                isValid = false;
+            }
+
+            // 密码强度验证
+            if (passwordInput.value.length < 8) {
+                showError('password', '密码长度至少为8位');
+                isValid = false;
+            }
+
+            // 邮箱格式验证
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(document.getElementById('email').value)) {
+                showError('email', '请输入有效的邮箱地址');
+                isValid = false;
+            }
+
+            // 手机号验证
+            const telRegex = /^1[3-9]\d{9}$/;
+            if (!telRegex.test(document.getElementById('telephone').value)) {
+                showError('telephone', '请输入有效的手机号码');
+                isValid = false;
+            }
+
+            // 必填字段验证
+            const requiredFields = ['secretCode', 'username', 'nickname', 'gender', 'userType'];
+            requiredFields.forEach(field => {
+                if (!document.getElementById(field).value) {
+                    showError(field, '此字段为必填项');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // 构造请求数据
+            let secretCode = document.getElementById('secretCode').value;
+            const formData = {
+                username: document.getElementById('username').value,
+                nickname: document.getElementById('nickname').value,
+                password: passwordInput.value,
+                email: document.getElementById('email').value,
+                telephone: document.getElementById('telephone').value,
+                gender: document.getElementById('gender').value,
+                userType: document.getElementById('userType').value
+            };
+
+            // 显示加载状态
+            apiResponse.textContent = "正在提交数据到服务器...";
+
+            try {
+                // 调用实际API
+                const response = await fetch('http://gjj.com:8080/api/users/internal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'secretCode': secretCode
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                // 显示API响应
+                apiResponse.textContent = JSON.stringify(result, null, 2);
+
+                // 如果注册成功，清空表单
+                if (result.status === "success" || response.ok) {
+                    form.reset();
+                    strengthMeter.style.width = '0%';
+                }
+
+            } catch (error) {
+                // 显示错误信息
+                const errorResponse = {
+                    error: "API请求失败",
+                    message: error.message,
+                    timestamp: new Date().toISOString()
+                };
+                apiResponse.textContent = JSON.stringify(errorResponse, null, 2);
+                console.error('API请求失败:', error);
+            }
+        });
+
+        // 显示错误信息
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                document.getElementById(fieldId).classList.add('error');
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.mapper.SysSequenceMapper">
+
+    <!-- 序列对象映射 -->
+    <resultMap id="sysSequenceResultMap" type="com.gjj.entity.SysSequence">
+        <id property="seqName" column="seq_name"/>
+        <result property="currentVal" column="current_val"/>
+        <result property="maxVal" column="max_val"/>
+        <result property="description" column="description"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 调用存储过程获取序列值 -->
+    <select id="getNextSequence" statementType="CALLABLE">
+        {call get_next_sequence(
+                #{seqName, mode=IN, jdbcType=VARCHAR},
+                #{nextVal, mode=OUT, jdbcType=CHAR}
+              )}
+    </select>
+
+    <!-- 根据主键查询序列 -->
+    <select id="find" resultMap="sysSequenceResultMap">
+        SELECT * FROM sys_sequence WHERE seq_name = #{seqName}
+    </select>
+
+    <!-- 更新序列数据 -->
+    <update id="update">
+        UPDATE sys_sequence
+        SET
+            current_val = #{currentVal},
+            max_val = #{maxVal},
+            description = #{description},
+            remark = #{remark}
+        WHERE seq_name = #{seqName}
+    </update>
+
+    <!-- 新增序列数据 -->
+    <insert id="add">
+        INSERT INTO sys_sequence(
+            seq_name,
+            current_val,
+            max_val,
+            description,
+            remark
+        ) VALUES (
+                     #{seqName},
+                     #{currentVal},
+                     #{maxVal},
+                     #{description},
+                     #{remark}
+                 )
+    </insert>
+
+    <!-- 删除序列数据 -->
+    <delete id="remove">
+        DELETE FROM sys_sequence
+        WHERE seq_name = #{seqName}
+    </delete>
+
+</mapper>

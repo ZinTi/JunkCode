@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公积金管理系统 - 验证中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #4a69bd 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .status-title svg {
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .status-content {
+            padding-left: 34px;
+        }
+
+        .status-item {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .status-label {
+            width: 120px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .status-value {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            margin: 30px auto;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid white;
+            animation: spin 1.5s linear infinite;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 16px;
+            display: none;
+        }
+
+        .error-message {
+            background-color: rgba(229, 62, 62, 0.2);
+            border: 1px solid rgba(252, 129, 129, 0.5);
+        }
+
+        .success-message {
+            background-color: rgba(72, 187, 120, 0.2);
+            border: 1px solid rgba(72, 187, 120, 0.5);
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(to right, #2a5298, #3a66c0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #4a69bd, #1e3799);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo-container">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 10C2 10 5 5 12 5C19 5 22 10 22 10M2 14C2 14 5 19 12 19C19 19 22 14 22 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
+        <h1>公积金管理系统</h1>
+        <div class="subtitle">筹资子系统 - 会话验证中</div>
+    </div>
+
+    <div class="status-card">
+        <div class="status-title">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" stroke-width="2"/>
+                <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            会话验证状态
+        </div>
+        <div class="status-content">
+            <div class="status-item">
+                <div class="status-label">用户ID:</div>
+                <div class="status-value" id="userIdStatus">检查中...</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">会话ID:</div>
+                <div class="status-value" id="sessionIdStatus">检查中...</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">验证状态:</div>
+                <div class="status-value" id="validationStatus">正在验证会话有效性</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+    </div>
+
+    <div class="loader"></div>
+
+    <div class="message error-message" id="errorMessage">
+        会话验证失败：<span id="errorDetail"></span>
+    </div>
+
+    <div class="message success-message" id="successMessage">
+        会话验证成功！正在跳转到系统主页面...
+    </div>
+
+    <a href="login.html" class="action-btn" id="loginBtn" style="display: none;">重新登录</a>
+
+    <div class="footer">
+        公积金管理系统 v1.0 © 2025 版权所有 | 安全提示：请勿在公共计算机上保存登录信息
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userIdStatus = document.getElementById('userIdStatus');
+        const sessionIdStatus = document.getElementById('sessionIdStatus');
+        const validationStatus = document.getElementById('validationStatus');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorDetail = document.getElementById('errorDetail');
+        const successMessage = document.getElementById('successMessage');
+        const loginBtn = document.getElementById('loginBtn');
+        const progressBar = document.getElementById('progressBar');
+
+        // 模拟进度条加载
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 2;
+            progressBar.style.width = `${progress}%`;
+            if (progress >= 100) clearInterval(progressInterval);
+        }, 100);
+
+        // 从sessionStorage获取用户信息
+        const sessionId = sessionStorage.getItem('sessionId');
+        const userId = sessionStorage.getItem('userId');
+
+        // 更新状态显示
+        userIdStatus.textContent = userId ? userId : '未找到';
+        sessionIdStatus.textContent = sessionId ? sessionId.substring(0, 20) + '...' : '未找到';
+
+        // 检查用户是否已登录
+        if (!sessionId || !userId) {
+            showError('用户未登录或会话信息缺失');
+            validationStatus.textContent = '验证失败：用户未登录';
+            loginBtn.style.display = 'inline-block';
+            return;
+        }
+
+        // 验证用户会话
+        validateSession(sessionId, userId);
+    });
+
+    // 验证用户会话
+    async function validateSession(sessionId, userId) {
+        const validationStatus = document.getElementById('validationStatus');
+
+        try {
+            // 发送验证请求
+            const response = await fetch(`/api/users/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'sessionId': sessionId
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.result) {
+                // 会话有效，存储用户数据
+                const userData = result.data;
+                sessionStorage.setItem('userId', userData.userId);
+                sessionStorage.setItem('username', userData.username);
+                sessionStorage.setItem('nickname', userData.nickname);
+                sessionStorage.setItem('email', userData.email);
+                sessionStorage.setItem('telephone', userData.telephone);
+                sessionStorage.setItem('gender', userData.gender);
+                sessionStorage.setItem('userType', userData.userType);
+                sessionStorage.setItem('createdAt', userData.createdAt);
+                sessionStorage.setItem('updatedAt', userData.updatedAt);
+
+                // 显示成功消息
+                validationStatus.textContent = '验证成功：会话有效';
+                successMessage.style.display = 'block';
+
+                // 2秒后跳转到主页面
+                setTimeout(() => {
+                    window.location.href = 'main.html';
+                }, 2000);
+            } else {
+                // 会话无效
+                showError(result.message || '会话验证失败');
+                validationStatus.textContent = '验证失败：' + (result.message || '未知错误');
+            }
+        } catch (error) {
+            // 网络错误
+            showError('网络错误，请检查连接: ' + error.message);
+            validationStatus.textContent = '验证失败：网络错误';
+        }
+    }
+
+    // 显示错误消息
+    function showError(message) {
+        errorDetail.textContent = message;
+        errorMessage.style.display = 'block';
+        loginBtn.style.display = 'inline-block';
+
+        // 隐藏加载动画
+        document.querySelector('.loader').style.display = 'none';
+    }
+</script>
+</body>
+</html>

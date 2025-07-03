@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gjj.mapper.UnitMapper">
+
+    <resultMap id="unitBaseInfoResultMap" type="com.gjj.entity.Unit">
+        <id property="unitAccNumber" column="unit_acc_number" />
+        <result property="unitName" column="unit_name" />
+        <result property="unitAddress" column="unit_address" />
+        <result property="orgCode" column="org_code" />
+        <result property="unitCategory" column="unit_category" />
+        <result property="unitType" column="unit_type" />
+        <result property="salaryDate" column="salary_date" jdbcType="TINYINT"/>
+        <result property="unitPhone" column="unit_phone" />
+        <result property="contactPerson" column="contact_person" />
+        <result property="agentId" column="agent_id" />
+        <result property="accountStatus" column="account_status" />
+        <result property="fundBalance" column="fund_balance" />
+        <result property="depositBase" column="deposit_base" />
+        <result property="unitRatio" column="unit_ratio" />
+        <result property="employeeRatio" column="employee_ratio" />
+        <result property="unitMonthlyDue" column="unit_monthly_due" />
+        <result property="employeeMonthlyDue" column="employee_monthly_due" />
+        <result property="employeeCount" column="employee_count" />
+        <result property="lastPaymentMonth" column="last_payment_month" />
+        <result property="institutionCode" column="institution_code" />
+        <result property="operator" column="operator" />
+        <result property="createDateTime" column="create_datetime"/>
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.gjj.entity.Unit">
+        INSERT INTO unit (
+            unit_acc_number, unit_name, unit_address, org_code, unit_category, unit_type,
+            salary_date, unit_phone, contact_person, agent_id, account_status, fund_balance,
+            deposit_base, unit_ratio, employee_ratio, unit_monthly_due, employee_monthly_due,
+            employee_count, last_payment_month, institution_code, operator, create_datetime, remark)
+        VALUES
+              (
+                    #{unitAccNumber}, #{unitName}, #{unitAddress}, #{orgCode}, #{unitCategory}, #{unitType},
+                    #{salaryDate}, #{unitPhone}, #{contactPerson}, #{agentId}, #{accountStatus}, #{fundBalance},
+                    #{depositBase}, #{unitRatio}, #{employeeRatio}, #{unitMonthlyDue}, #{employeeMonthlyDue},
+                    #{employeeCount}, #{lastPaymentMonth}, #{institutionCode}, #{operator}, #{createDateTime}, #{remark}
+              )
+    </insert>
+
+    <delete id="deleteByUnitAccNumber" parameterType="string">
+        DELETE FROM unit WHERE unit_acc_number = #{unitAccNumber}
+    </delete>
+
+    <update id="update" parameterType="com.gjj.entity.Unit">
+        UPDATE unit SET
+              unit_name = #{unitName},
+              unit_address = #{unitAddress},
+              org_code = #{orgCode},
+              unit_category = #{unitCategory},
+              unit_type = #{unitType},
+              salary_date = #{salaryDate},
+              unit_phone = #{unitPhone},
+              contact_person = #{contactPerson},
+              agent_id = #{agentId},
+              account_status = #{accountStatus},
+              fund_balance = #{fundBalance},
+              deposit_base = #{depositBase},
+              unit_ratio = #{unitRatio},
+              employee_ratio = #{employeeRatio},
+              unit_monthly_due = #{unitMonthlyDue},
+              employee_monthly_due = #{employeeMonthlyDue},
+              employee_count = #{employeeCount},
+              last_payment_month = #{lastPaymentMonth},
+              institution_code = #{institutionCode},
+              remark = #{remark}
+        WHERE unit_acc_number = #{unitAccNumber}
+    </update>
+
+    <update id="updateAccountStatus">
+        UPDATE unit SET account_status = #{accountStatus} WHERE unit_acc_number = #{unitAccNumber}
+    </update>
+
+    <select id="findByUnitAccNumber" resultMap="unitBaseInfoResultMap">
+        SELECT * FROM unit WHERE unit_acc_number = #{unitAccNumber}
+    </select>
+
+    <select id="findByUnitName" resultMap="unitBaseInfoResultMap">
+        SELECT * FROM unit WHERE unit_name LIKE CONCAT('%', #{unitName}, '%')
+    </select>
+</mapper>

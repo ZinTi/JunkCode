@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 配置属性文件 -->
+    <properties resource="database.properties"/>
+
+    <settings>
+        <!-- 开启下划线转驼峰命名映射 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 启用自动映射 -->
+        <setting name="autoMappingBehavior" value="FULL"/>
+        <!-- 允许 JDBC 支持自动生成主键 -->
+        <setting name="useGeneratedKeys" value="true"/>
+    </settings>
+
+    <!-- 配置类型别名 -->
+    <typeAliases>
+        <package name="com.gjj.entity"/>
+    </typeAliases>
+
+    <!-- 注册自定义类型处理器 -->
+    <typeHandlers>
+        <!-- 注册 UUID 类型处理器 -->
+        <typeHandler handler="com.gjj.common.handler.UUIDTypeHandler"
+                     javaType="java.util.UUID"
+                     jdbcType="BINARY"/>
+
+        <!-- 注册 LocalDateTime 类型处理器（MyBatis 3.4.5+ 内置支持） -->
+        <typeHandler handler="org.apache.ibatis.type.LocalDateTimeTypeHandler"
+                     javaType="java.time.LocalDateTime"
+                     jdbcType="TIMESTAMP"/>
+    </typeHandlers>
+
+    <environments default="development">
+        <environment id="development">
+            <!-- 使用JDBC事务管理 -->
+            <transactionManager type="JDBC"/>
+
+            <!-- 配置连接池 -->
+            <dataSource type="POOLED">
+                <!-- 连接池配置 -->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+
+                <!-- 连接池参数 -->
+                <property name="poolMaximumActiveConnections" value="20"/>   <!-- 最大活动连接数 -->
+                <property name="poolMaximumIdleConnections" value="5"/>      <!-- 最大空闲连接数 -->
+                <property name="poolMaximumCheckoutTime" value="20000"/>     <!-- 最大检出时间(毫秒) -->
+                <property name="poolTimeToWait" value="20000"/>              <!-- 获取连接等待超时时间 -->
+                <property name="poolPingEnabled" value="true"/>              <!-- 开启连接有效性检测 -->
+                <property name="poolPingQuery" value="SELECT 1"/>            <!-- 有效性检测SQL -->
+                <property name="poolPingConnectionsNotUsedFor" value="60000"/><!-- 连接空闲多久后检测 -->
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!-- 注册Mapper XML文件 -->
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/SysSequenceMapper.xml"/>
+        <mapper resource="mapper/UnitBaseInfoMapper.xml"/>
+        <mapper resource="mapper/PersonalBaseInfoMapper.xml"/>
+
+    </mappers>
+</configuration>

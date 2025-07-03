@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjj.mapper.UserMapper">
+
+    <!-- 自定义 UUID 类型处理器 -->
+    <resultMap id="userResultMap" type="com.gjj.entity.User">
+        <id property="id" column="id" typeHandler="com.gjj.common.handler.UUIDTypeHandler"/>
+        <result property="username" column="username"/>
+        <result property="nickname" column="nickname"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="email" column="email"/>
+        <result property="telephone" column="telephone"/>
+        <result property="gender" column="gender"/>
+        <result property="avatarPath" column="avatar_path"/>
+        <result property="userType" column="user_type"/>
+        <result property="createdTime" column="created_at"/>
+        <result property="updatedTime" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="userIdResultMap" type="com.gjj.entity.UserId">
+        <id property="id" column="id" typeHandler="com.gjj.common.handler.UUIDTypeHandler"/>
+    </resultMap>
+
+    <!-- 统计用户总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM users
+    </select>
+
+    <!-- 根据ID查询用户 -->
+    <select id="findById" resultMap="userResultMap">
+        SELECT * FROM users
+        WHERE id = #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+    </select>
+
+    <!-- 根据 username 查询用户ID -->
+    <select id="findIdByUsername" resultMap="userIdResultMap">
+        SELECT id FROM users WHERE username = #{username} LIMIT 1
+    </select>
+
+    <!-- 根据邮箱查询用户 -->
+    <select id="findByEmail" resultMap="userResultMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <!-- 根据电话查询用户 -->
+    <select id="findByTelephone" resultMap="userResultMap">
+        SELECT * FROM users WHERE telephone = #{telephone}
+    </select>
+
+    <!-- 批量查询用户 -->
+    <select id="findByIds" resultMap="userResultMap">
+        SELECT * FROM users
+        WHERE id IN (
+        <foreach collection="ids" item="id" separator=",">
+            #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+        </foreach>
+        )
+    </select>
+
+    <!-- 根据用户名查询用户 -->
+    <select id="findByUsername" resultMap="userResultMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <!-- 分页查询所有用户 -->
+    <select id="findAll" resultMap="userResultMap">
+        SELECT * FROM users
+        ORDER BY created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 根据昵称分页查询用户 -->
+    <select id="findAllByNickname" resultMap="userResultMap">
+        SELECT * FROM users
+        WHERE nickname = #{nickname}
+        ORDER BY created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="add" parameterType="com.gjj.entity.User">
+        INSERT INTO users(
+            id, username, nickname, password, salt,
+            email, telephone, gender, avatar_path,
+            user_type, created_at, updated_at
+        ) VALUES (
+                     #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler},
+                     #{username},
+                     #{nickname, jdbcType=VARCHAR},
+                     #{password},
+                     #{salt},
+                     #{email},
+                     #{telephone},
+                     #{gender},
+                     #{avatarPath, jdbcType=VARCHAR},
+                     #{userType},
+                     #{createdTime},
+                     #{updatedTime}
+                 )
+    </insert>
+
+    <!-- 更新用户基本信息 -->
+    <update id="updateBaseInfo" parameterType="com.gjj.entity.User">
+        UPDATE users SET
+                         username = #{username},
+                         nickname = #{nickname},
+                         email = #{email},
+                         telephone = #{telephone},
+                         gender = #{gender},
+                         user_type = #{userType},
+                         updated_at = #{updatedTime}
+        WHERE id = #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+    </update>
+
+    <!-- 更新密码和盐值 -->
+    <update id="updateHashedPassword">
+        UPDATE users SET
+                         password = #{newHashedPassword},
+                         salt = #{newSalt},
+                         updated_at = #{updatedTime}
+        WHERE id = #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+    </update>
+
+    <!-- 更新头像路径 -->
+    <update id="updateAvatarPath">
+        UPDATE users SET
+                         avatar_path = #{avatarPath},
+                         updated_at = #{updatedTime}
+        WHERE id = #{id, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="remove">
+        DELETE FROM users
+        WHERE id = #{userId, typeHandler=com.gjj.common.handler.UUIDTypeHandler}
+    </delete>
+
+    <!-- 根据用户名删除用户 -->
+    <delete id="removeByUsername">
+        DELETE FROM users
+        WHERE username = #{username}
+    </delete>
+</mapper>
