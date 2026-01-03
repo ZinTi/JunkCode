@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车4S店服务管理系统 - 登录</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #6c757d;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #e0e0e0;
+            --dark-border: #333;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: var(--dark-card);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .logo p {
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+        
+        .user-type-selector {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+        }
+        
+        .user-type {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--dark-card);
+        }
+        
+        .user-type.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .user-type:hover:not(.active) {
+            background-color: rgba(74, 144, 226, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--dark-text);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--dark-border);
+            border-radius: 5px;
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .login-btn:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .message.success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success-color);
+            display: block;
+        }
+        
+        .message.error {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--error-color);
+            display: block;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>汽车4S店服务管理系统</h1>
+            <p>请选择登录方式并输入凭据</p>
+        </div>
+        
+        <div class="user-type-selector">
+            <div class="user-type active" data-type="admin">管理员登录</div>
+            <div class="user-type" data-type="customer">客户登录</div>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="userId">用户ID</label>
+                <input type="text" id="userId" name="id" required placeholder="请输入您的用户ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required placeholder="请输入您的密码">
+            </div>
+            
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-text">登录</span>
+            </button>
+            
+            <div class="message" id="message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userTypeSelector = document.querySelector('.user-type-selector');
+            const userTypes = document.querySelectorAll('.user-type');
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('message');
+            const btnText = document.querySelector('.btn-text');
+            
+            let currentUserType = 'admin'; // 默认选择管理员登录
+            
+            // 用户类型切换
+            userTypes.forEach(type => {
+                type.addEventListener('click', function() {
+                    userTypes.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentUserType = this.getAttribute('data-type');
+                });
+            });
+            
+            // 登录表单提交
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const userId = document.getElementById('userId').value.trim();
+                const password = document.getElementById('password').value.trim();
+                
+                if (!userId || !password) {
+                    showMessage('用户ID和密码不能为空', 'error');
+                    return;
+                }
+                
+                // 禁用按钮并显示加载状态
+                loginBtn.disabled = true;
+                btnText.innerHTML = '<span class="spinner"></span>登录中...';
+                
+                try {
+                    // 根据用户类型选择不同的API端点
+                    const apiUrl = currentUserType === 'admin' 
+                        ? '/api/admin/login' 
+                        : '/api/customer/login';
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: userId,
+                            password: password
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // 登录成功，将JSON数据解析为键值对并存储在本地存储中
+                        storeDataAsKeyValuePairs(data);
+                        showMessage('登录成功，正在跳转...', 'success');
+                        
+                        // 延迟跳转，让用户看到成功消息
+                        setTimeout(() => {
+                            window.location.href = '/s/workbench.html';
+                        }, 1000);
+                    } else {
+                        // 登录失败，显示错误信息
+                        showMessage(data.result || '登录失败，请检查您的凭据', 'error');
+                    }
+                } catch (error) {
+                    console.error('登录错误:', error);
+                    showMessage('网络错误，请稍后重试', 'error');
+                } finally {
+                    // 恢复按钮状态
+                    loginBtn.disabled = false;
+                    btnText.textContent = '登录';
+                }
+            });
+            
+            // 将JSON数据解析为键值对并存储在本地存储中
+            function storeDataAsKeyValuePairs(data) {
+                // 清除之前的登录数据
+                const keysToRemove = ['session_id', 'id', 'name', 'user_type', 'result'];
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                
+                // 遍历数据对象的每个属性
+                for (const [key, value] of Object.entries(data)) {
+                    // 将值转换为字符串后存储
+                    localStorage.setItem(key, String(value));
+                }
+            }
+            
+            // 显示消息函数
+            function showMessage(text, type) {
+                messageDiv.textContent = text;
+                messageDiv.className = 'message ' + type;
+            }
+            
+            // 检查是否已有登录信息
+            if (isUserLoggedIn()) {
+                // 如果已有有效会话，直接跳转到工作台
+                window.location.href = '/s/workbench.html';
+            }
+            
+            // 检查用户是否已登录
+            function isUserLoggedIn() {
+                // 检查是否存在用户会话ID
+                return localStorage.getItem('session_id') !== null;
+            }
+        });
+    </script>
+</body>
+</html>

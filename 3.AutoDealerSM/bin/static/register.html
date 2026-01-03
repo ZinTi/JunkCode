@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车4S店服务管理系统 - 客户注册</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 1rem;
+        }
+        
+        /* 背景装饰 */
+        .bg-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(41, 98, 255, 0.05);
+        }
+        
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+        }
+        
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 15%;
+            right: 10%;
+            background: rgba(156, 39, 176, 0.05);
+        }
+        
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            right: 15%;
+            background: rgba(0, 150, 136, 0.05);
+        }
+        
+        /* 主要内容 */
+        .container {
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 800px;
+            width: 100%;
+            z-index: 1;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .system-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: #e0e0e0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .register-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            text-align: left;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-label {
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            padding: 0.7rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: rgba(41, 98, 255, 0.5);
+            box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.2);
+        }
+        
+        .form-input.valid, .form-select.valid, .form-textarea.valid {
+            border-color: rgba(0, 200, 83, 0.5);
+        }
+        
+        .form-input.invalid, .form-select.invalid, .form-textarea.invalid {
+            border-color: rgba(244, 67, 54, 0.5);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.3rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .radio-option input {
+            margin: 0;
+        }
+        
+        .validation-message {
+            margin-top: 0.2rem;
+            font-size: 0.8rem;
+            height: 1rem;
+        }
+        
+        .validation-message.valid {
+            color: rgba(0, 200, 83, 0.8);
+        }
+        
+        .validation-message.invalid {
+            color: rgba(244, 67, 54, 0.8);
+        }
+        
+        .password-strength {
+            margin-top: 0.3rem;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .password-strength.weak .password-strength-bar {
+            width: 33%;
+            background-color: #f44336;
+        }
+        
+        .password-strength.medium .password-strength-bar {
+            width: 66%;
+            background-color: #ff9800;
+        }
+        
+        .password-strength.strong .password-strength-bar {
+            width: 100%;
+            background-color: #4caf50;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            grid-column: 1 / -1;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn:hover {
+            background: rgba(41, 98, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(41, 98, 255, 0.2);
+        }
+        
+        .btn-submit {
+            background: rgba(41, 98, 255, 0.2);
+        }
+        
+        .btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-message {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            grid-column: 1 / -1;
+            font-size: 0.9rem;
+        }
+        
+        .result-message.success {
+            background: rgba(0, 200, 83, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            display: block;
+        }
+        
+        .result-message.error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            display: block;
+        }
+        
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #777;
+            font-size: 0.8rem;
+            padding: 0 1rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .system-title {
+                font-size: 1.4rem;
+            }
+            
+            .page-title {
+                font-size: 1.1rem;
+            }
+            
+            .register-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .system-title {
+                font-size: 1.2rem;
+            }
+            
+            .page-title {
+                font-size: 1rem;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-elements">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="system-title">汽车4S店服务管理系统</h1>
+            <h2 class="page-title">客户注册页面</h2>
+        </div>
+        
+        <form class="register-form" id="registerForm">
+            <!-- 基本信息 -->
+            <div class="form-group">
+                <label class="form-label" for="id">客户账号</label>
+                <input type="text" id="id" name="id" class="form-input" required>
+                <div class="validation-message" id="idMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="name">姓名</label>
+                <input type="text" id="name" name="name" class="form-input" required>
+                <div class="validation-message" id="nameMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">密码</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+                <div class="password-strength" id="passwordStrength">
+                    <div class="password-strength-bar"></div>
+                </div>
+                <div class="validation-message" id="passwordMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">确认密码</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required>
+                <div class="validation-message" id="confirmPasswordMessage"></div>
+            </div>
+            
+            <!-- 联系信息 -->
+            <div class="form-group">
+                <label class="form-label">性别</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="gender" value="male" required>
+                        <span>男</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="gender" value="female" required>
+                        <span>女</span>
+                    </label>
+                </div>
+                <div class="validation-message" id="genderMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="email">邮箱</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+                <div class="validation-message" id="emailMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="phone">电话</label>
+                <input type="tel" id="phone" name="phone" class="form-input" required>
+                <div class="validation-message" id="phoneMessage"></div>
+            </div>
+            
+            <div class="form-group full-width">
+                <label class="form-label" for="address">地址</label>
+                <input type="text" id="address" name="address" class="form-input" required>
+                <div class="validation-message" id="addressMessage"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="zip_code">邮编</label>
+                <input type="text" id="zip_code" name="zip_code" class="form-input" required>
+                <div class="validation-message" id="zipCodeMessage"></div>
+            </div>
+            
+            <!-- 车辆信息 -->
+            <div class="form-group full-width">
+                <label class="form-label" for="car_model">车型</label>
+                <input type="text" id="car_model" name="car_model" class="form-input" required>
+                <div class="validation-message" id="carModelMessage"></div>
+            </div>
+            
+            <div class="form-group full-width">
+                <label class="form-label" for="car_condition">车况</label>
+                <textarea id="car_condition" name="car_condition" class="form-textarea" required></textarea>
+                <div class="validation-message" id="carConditionMessage"></div>
+            </div>
+            
+            <div class="form-group full-width">
+                <label class="form-label" for="car_id">车牌号</label>
+                <input type="text" id="car_id" name="car_id" class="form-input" required>
+                <div class="validation-message" id="carIdMessage"></div>
+            </div>
+            
+            <div class="actions">
+                <button type="submit" class="btn btn-submit" id="submitBtn" disabled>注册客户</button>
+                <a href="/" class="btn">返回首页</a>
+            </div>
+            
+            <div class="result-message" id="resultMessage"></div>
+        </form>
+    </div>
+    
+    <div class="footer">
+        <p>汽车4S店服务管理系统 © 2025</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            // 获取所有表单字段
+            const idInput = document.getElementById('id');
+            const nameInput = document.getElementById('name');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const genderInputs = document.querySelectorAll('input[name="gender"]');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const addressInput = document.getElementById('address');
+            const zipCodeInput = document.getElementById('zip_code');
+            const carModelInput = document.getElementById('car_model');
+            const carConditionInput = document.getElementById('car_condition');
+            const carIdInput = document.getElementById('car_id');
+            
+            // 获取所有验证消息元素
+            const idMessage = document.getElementById('idMessage');
+            const nameMessage = document.getElementById('nameMessage');
+            const passwordMessage = document.getElementById('passwordMessage');
+            const confirmPasswordMessage = document.getElementById('confirmPasswordMessage');
+            const genderMessage = document.getElementById('genderMessage');
+            const emailMessage = document.getElementById('emailMessage');
+            const phoneMessage = document.getElementById('phoneMessage');
+            const addressMessage = document.getElementById('addressMessage');
+            const zipCodeMessage = document.getElementById('zipCodeMessage');
+            const carModelMessage = document.getElementById('carModelMessage');
+            const carConditionMessage = document.getElementById('carConditionMessage');
+            const carIdMessage = document.getElementById('carIdMessage');
+            
+            const passwordStrength = document.getElementById('passwordStrength');
+            
+            // 验证状态
+            let validationState = {
+                id: false,
+                name: false,
+                password: false,
+                confirmPassword: false,
+                gender: false,
+                email: false,
+                phone: false,
+                address: false,
+                zipCode: false,
+                carModel: false,
+                carCondition: false,
+                carId: false
+            };
+            
+            // 验证账号ID
+            idInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    idMessage.textContent = '请输入客户账号';
+                    idMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.id = false;
+                } else if (value.length < 3) {
+                    idMessage.textContent = '账号长度不能少于3个字符';
+                    idMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.id = false;
+                } else {
+                    idMessage.textContent = '账号格式正确';
+                    idMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.id = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证姓名
+            nameInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    nameMessage.textContent = '请输入姓名';
+                    nameMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.name = false;
+                } else if (value.length < 2) {
+                    nameMessage.textContent = '姓名长度不能少于2个字符';
+                    nameMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.name = false;
+                } else {
+                    nameMessage.textContent = '姓名格式正确';
+                    nameMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.name = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证密码强度
+            passwordInput.addEventListener('input', function() {
+                const value = this.value;
+                const strength = checkPasswordStrength(value);
+                
+                // 更新密码强度指示器
+                passwordStrength.className = 'password-strength ' + strength.level;
+                
+                if (value.length === 0) {
+                    passwordMessage.textContent = '请输入密码';
+                    passwordMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.password = false;
+                } else if (value.length < 6) {
+                    passwordMessage.textContent = '密码长度不能少于6个字符';
+                    passwordMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.password = false;
+                } else if (value.length > 18) {
+                    passwordMessage.textContent = '密码长度不能超过18个字符';
+                    passwordMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.password = false;
+                } else if (strength.score < 2) {
+                    passwordMessage.textContent = '密码需包含至少两种字符类型（字母、数字、特殊字符）';
+                    passwordMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.password = false;
+                } else {
+                    passwordMessage.textContent = strength.message;
+                    passwordMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.password = true;
+                }
+                
+                // 更新确认密码验证
+                validateConfirmPassword();
+                updateSubmitButton();
+            });
+            
+            // 验证确认密码
+            confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+            
+            function validateConfirmPassword() {
+                const passwordValue = passwordInput.value;
+                const confirmValue = confirmPasswordInput.value;
+                
+                if (confirmValue.length === 0) {
+                    confirmPasswordMessage.textContent = '请再次输入密码';
+                    confirmPasswordMessage.className = 'validation-message invalid';
+                    confirmPasswordInput.classList.remove('valid');
+                    confirmPasswordInput.classList.add('invalid');
+                    validationState.confirmPassword = false;
+                } else if (confirmValue !== passwordValue) {
+                    confirmPasswordMessage.textContent = '两次输入的密码不一致';
+                    confirmPasswordMessage.className = 'validation-message invalid';
+                    confirmPasswordInput.classList.remove('valid');
+                    confirmPasswordInput.classList.add('invalid');
+                    validationState.confirmPassword = false;
+                } else {
+                    confirmPasswordMessage.textContent = '密码匹配';
+                    confirmPasswordMessage.className = 'validation-message valid';
+                    confirmPasswordInput.classList.remove('invalid');
+                    confirmPasswordInput.classList.add('valid');
+                    validationState.confirmPassword = true;
+                }
+                
+                updateSubmitButton();
+            }
+            
+            // 验证性别
+            genderInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const selected = document.querySelector('input[name="gender"]:checked');
+                    if (selected) {
+                        genderMessage.textContent = '性别已选择';
+                        genderMessage.className = 'validation-message valid';
+                        validationState.gender = true;
+                    } else {
+                        genderMessage.textContent = '请选择性别';
+                        genderMessage.className = 'validation-message invalid';
+                        validationState.gender = false;
+                    }
+                    updateSubmitButton();
+                });
+            });
+            
+            // 验证邮箱
+            emailInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (value.length === 0) {
+                    emailMessage.textContent = '请输入邮箱地址';
+                    emailMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.email = false;
+                } else if (!emailRegex.test(value)) {
+                    emailMessage.textContent = '请输入有效的邮箱地址';
+                    emailMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.email = false;
+                } else {
+                    emailMessage.textContent = '邮箱格式正确';
+                    emailMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.email = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证电话
+            phoneInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                const phoneRegex = /^1[3-9]\d{9}$/;
+                
+                if (value.length === 0) {
+                    phoneMessage.textContent = '请输入电话号码';
+                    phoneMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.phone = false;
+                } else if (!phoneRegex.test(value)) {
+                    phoneMessage.textContent = '请输入有效的手机号码';
+                    phoneMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.phone = false;
+                } else {
+                    phoneMessage.textContent = '电话号码格式正确';
+                    phoneMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.phone = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证地址
+            addressInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    addressMessage.textContent = '请输入地址';
+                    addressMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.address = false;
+                } else if (value.length < 5) {
+                    addressMessage.textContent = '地址信息过短';
+                    addressMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.address = false;
+                } else {
+                    addressMessage.textContent = '地址格式正确';
+                    addressMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.address = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证邮编
+            zipCodeInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                const zipCodeRegex = /^\d{6}$/;
+                
+                if (value.length === 0) {
+                    zipCodeMessage.textContent = '请输入邮编';
+                    zipCodeMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.zipCode = false;
+                } else if (!zipCodeRegex.test(value)) {
+                    zipCodeMessage.textContent = '请输入6位数字邮编';
+                    zipCodeMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.zipCode = false;
+                } else {
+                    zipCodeMessage.textContent = '邮编格式正确';
+                    zipCodeMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.zipCode = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证车型
+            carModelInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    carModelMessage.textContent = '请输入车型';
+                    carModelMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.carModel = false;
+                } else {
+                    carModelMessage.textContent = '车型信息正确';
+                    carModelMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.carModel = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证车况
+            carConditionInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    carConditionMessage.textContent = '请输入车况描述';
+                    carConditionMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.carCondition = false;
+                } else if (value.length < 5) {
+                    carConditionMessage.textContent = '车况描述过短';
+                    carConditionMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.carCondition = false;
+                } else {
+                    carConditionMessage.textContent = '车况信息正确';
+                    carConditionMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.carCondition = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 验证车牌号
+            carIdInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                if (value.length === 0) {
+                    carIdMessage.textContent = '请输入车牌号';
+                    carIdMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.carId = false;
+                } else if (value.length < 4) {
+                    carIdMessage.textContent = '车牌号格式不正确';
+                    carIdMessage.className = 'validation-message invalid';
+                    this.classList.remove('valid');
+                    this.classList.add('invalid');
+                    validationState.carId = false;
+                } else {
+                    carIdMessage.textContent = '车牌号格式正确';
+                    carIdMessage.className = 'validation-message valid';
+                    this.classList.remove('invalid');
+                    this.classList.add('valid');
+                    validationState.carId = true;
+                }
+                
+                updateSubmitButton();
+            });
+            
+            // 检查密码强度
+            function checkPasswordStrength(password) {
+                let score = 0;
+                let message = '';
+                
+                // 检查长度
+                if (password.length >= 8) score++;
+                
+                // 检查是否包含小写字母
+                if (/[a-z]/.test(password)) score++;
+                
+                // 检查是否包含大写字母
+                if (/[A-Z]/.test(password)) score++;
+                
+                // 检查是否包含数字
+                if (/[0-9]/.test(password)) score++;
+                
+                // 检查是否包含特殊字符
+                if (/[^a-zA-Z0-9]/.test(password)) score++;
+                
+                // 确定强度级别
+                let level = 'weak';
+                if (score >= 4) {
+                    level = 'strong';
+                    message = '密码强度：强';
+                } else if (score >= 3) {
+                    level = 'medium';
+                    message = '密码强度：中';
+                } else {
+                    level = 'weak';
+                    message = '密码强度：弱';
+                }
+                
+                return {
+                    score: score,
+                    level: level,
+                    message: message
+                };
+            }
+            
+            // 更新提交按钮状态
+            function updateSubmitButton() {
+                const allValid = Object.values(validationState).every(state => state);
+                submitBtn.disabled = !allValid;
+            }
+            
+            // 表单提交处理
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 禁用提交按钮，防止重复提交
+                submitBtn.disabled = true;
+                submitBtn.textContent = '注册中...';
+                
+                // 获取选中的性别
+                const selectedGender = document.querySelector('input[name="gender"]:checked');
+                
+                // 准备提交数据
+                const formData = {
+                    id: idInput.value.trim(),
+                    name: nameInput.value.trim(),
+                    password: passwordInput.value,
+                    gender: selectedGender ? selectedGender.value : '',
+                    email: emailInput.value.trim(),
+                    phone: phoneInput.value.trim(),
+                    address: addressInput.value.trim(),
+                    zip_code: zipCodeInput.value.trim(),
+                    car_model: carModelInput.value.trim(),
+                    car_condition: carConditionInput.value.trim(),
+                    car_id: carIdInput.value.trim()
+                };
+                
+                // 实际API调用
+                makeApiCall(formData)
+                    .then(response => {
+                        // 显示成功消息
+                        resultMessage.textContent = response.result;
+                        resultMessage.className = 'result-message success';
+                        
+                        // 重置表单
+                        form.reset();
+                        resetValidation();
+                    })
+                    .catch(error => {
+                        // 显示错误消息
+                        resultMessage.textContent = error.result || '注册失败，请稍后重试';
+                        resultMessage.className = 'result-message error';
+                        
+                        // 重新启用提交按钮
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '注册客户';
+                    });
+            });
+            
+            // 重置验证状态
+            function resetValidation() {
+                // 重置所有验证状态
+                Object.keys(validationState).forEach(key => {
+                    validationState[key] = false;
+                });
+                
+                // 重置所有消息
+                const messages = document.querySelectorAll('.validation-message');
+                messages.forEach(message => {
+                    message.textContent = '';
+                    message.className = 'validation-message';
+                });
+                
+                // 重置所有输入框
+                const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+                inputs.forEach(input => {
+                    input.classList.remove('valid', 'invalid');
+                });
+                
+                // 重置密码强度指示器
+                passwordStrength.className = 'password-strength';
+                
+                updateSubmitButton();
+                submitBtn.textContent = '注册客户';
+            }
+            
+            // 实际API调用
+            function makeApiCall(data) {
+                return new Promise((resolve, reject) => {
+                    fetch('/api/customer/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.result && data.result.includes("成功")) {
+                            resolve(data);
+                        } else {
+                            reject(data);
+                        }
+                    })
+                    .catch(error => {
+                        reject({ result: "网络错误，请检查连接后重试" });
+                    });
+                });
+            }
+            
+            // 添加按钮点击效果
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // 创建点击波纹效果
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.5);
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+import{m as n,h as o,e as r,o as t}from"./index-CW84L7Dy.js";const s={};function a(c,e){return t(),o("div",null,[...e[0]||(e[0]=[r("h1",null,"My Info",-1)])])}const l=n(s,[["render",a]]);export{l as default};

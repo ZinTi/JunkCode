@@ -1,0 +1,1 @@
+import{m as t,h as n,e as o,o as c}from"./index-CW84L7Dy.js";const r={};function s(l,e){return c(),n("div",null,[...e[0]||(e[0]=[o("h1",null,"Delete My Account",-1)])])}const u=t(r,[["render",s]]);export{u as default};

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面不存在</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 背景装饰 */
+        .bg-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(41, 98, 255, 0.05);
+        }
+        
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+        }
+        
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 15%;
+            right: 10%;
+            background: rgba(156, 39, 176, 0.05);
+        }
+        
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            right: 15%;
+            background: rgba(0, 150, 136, 0.05);
+        }
+        
+        /* 主要内容 */
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            z-index: 1;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 900;
+            letter-spacing: 0.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1;
+        }
+        
+        .error-text {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            color: #e0e0e0;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            color: #aaa;
+            max-width: 600px;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            padding: 0.9rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn:hover {
+            background: rgba(41, 98, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(41, 98, 255, 0.2);
+        }
+        
+        .btn-home {
+            background: rgba(41, 98, 255, 0.2);
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+            text-align: center;
+            color: #777;
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+        
+        /* 404数字动画 */
+        .error-code span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .error-code:hover span:nth-child(1) {
+            transform: translateY(-10px) rotate(-5deg);
+            color: #2962ff;
+        }
+        
+        .error-code:hover span:nth-child(2) {
+            transform: translateY(5px) rotate(5deg);
+            color: #9c27b0;
+        }
+        
+        .error-code:hover span:nth-child(3) {
+            transform: translateY(-15px) rotate(-10deg);
+            color: #00bcd4;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 7rem;
+                letter-spacing: 0.3rem;
+            }
+            
+            .error-text {
+                font-size: 2rem;
+            }
+            
+            .message {
+                font-size: 1.1rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 5rem;
+            }
+            
+            .error-text {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-elements">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    
+    <div class="container">
+        <h1 class="error-code">
+            <span>4</span>
+            <span>0</span>
+            <span>4</span>
+        </h1>
+        <h2 class="error-text">NOT FOUND</h2>
+        
+        <p class="message">
+            抱歉，您访问的页面不存在。可能是链接已失效、页面已被移除，或者您输入了错误的网址。
+        </p>
+        
+        <div class="actions">
+            <a href="/" class="btn btn-home">返回首页</a>
+            <a href="javascript:history.back()" class="btn">返回上一页</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>访问的页面不存在</p>
+    </div>
+    
+    <script>
+        // 简单的交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 404数字动画
+            const errorCode = document.querySelector('.error-code');
+            const digits = errorCode.querySelectorAll('span');
+            
+            errorCode.addEventListener('mouseenter', function() {
+                digits.forEach((digit, index) => {
+                    setTimeout(() => {
+                        digit.style.transform = 'translateY(-10px)';
+                    }, index * 100);
+                });
+            });
+            
+            errorCode.addEventListener('mouseleave', function() {
+                digits.forEach((digit, index) => {
+                    setTimeout(() => {
+                        digit.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            });
+            
+            // 按钮点击效果
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // 创建点击波纹效果
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.5);
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

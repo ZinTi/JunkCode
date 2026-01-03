@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车4S店服务管理系统</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .menu {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: #34495e;
+            border-left: 4px solid #3498db;
+        }
+        
+        .submenu {
+            list-style: none;
+            margin-left: 20px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .menu-item.active .submenu {
+            display: block;
+        }
+        
+        .submenu-item {
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submenu-item:hover, .submenu-item.active {
+            background-color: #2c3e50;
+            color: #3498db;
+        }
+        
+        /* 主内容区样式 */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 15px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        /* 功能卡片样式 */
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-processing {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .form-col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        /* 标签页样式 */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #3498db;
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .form-col {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>汽车4S店服务管理系统</h1>
+            </div>
+            <ul class="menu">
+                <li class="menu-item active" data-target="repair-management">
+                    <span>维修管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item active" data-tab="repair-registration">维修登记</li>
+                        <li class="submenu-item" data-tab="repair-order-management">维修单管理</li>
+                        <li class="submenu-item" data-tab="acceptance">验收</li>
+                        <li class="submenu-item" data-tab="settlement">结算</li>
+                        <li class="submenu-item" data-tab="warranty-claim-entry">走保单录入</li>
+                        <li class="submenu-item" data-tab="warranty-claim-query">走保单查询</li>
+                        <li class="submenu-item" data-tab="repair-record">维修记录</li>
+                        <li class="submenu-item" data-tab="registration-query">登记查询</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="beauty-maintenance">
+                    <span>汽车美容保养管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-tab="beauty-registration">美容保养登记</li>
+                        <li class="submenu-item" data-tab="beauty-order-management">美容保养单管理</li>
+                        <li class="submenu-item" data-tab="beauty-acceptance">验收</li>
+                        <li class="submenu-item" data-tab="beauty-settlement">费用结算</li>
+                        <li class="submenu-item" data-tab="beauty-record">美容保养记录</li>
+                        <li class="submenu-item" data-tab="beauty-registration-query">登记查询</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="financial-management">
+                    <span>账务管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-tab="repair-settlement">维修费用结算</li>
+                        <li class="submenu-item" data-tab="beauty-settlement-financial">美容保养费用结算</li>
+                        <li class="submenu-item" data-tab="expense-query">费用查询</li>
+                        <li class="submenu-item" data-tab="payable-settlement">应付款结算</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="parts-management">
+                    <span>配件管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-tab="warehouse-management">仓库管理</li>
+                        <li class="submenu-item" data-tab="parts-info">配件基本信息</li>
+                        <li class="submenu-item" data-tab="parts-application">配件申请</li>
+                        <li class="submenu-item" data-tab="purchase-return">进货、退货</li>
+                        <li class="submenu-item" data-tab="parts-sales">销售</li>
+                        <li class="submenu-item" data-tab="parts-settlement">结算</li>
+                        <li class="submenu-item" data-tab="inventory-query">库存查询</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="header">
+                <h2>维修管理 - 维修登记</h2>
+                <div class="user-info">
+                    <span>管理员：张三</span>
+                    <button class="btn btn-secondary">退出系统</button>
+                </div>
+            </div>
+            
+            <!-- 维修登记内容 -->
+            <div class="card" id="repair-management">
+                <div class="card-header">
+                    <h3>维修登记</h3>
+                    <button class="btn">新增登记</button>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="vehicle-number">车牌号码</label>
+                                    <input type="text" id="vehicle-number" class="form-control" placeholder="请输入车牌号码">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="vehicle-brand">车辆品牌</label>
+                                    <input type="text" id="vehicle-brand" class="form-control" placeholder="请输入车辆品牌">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="owner-name">车主姓名</label>
+                                    <input type="text" id="owner-name" class="form-control" placeholder="请输入车主姓名">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="owner-phone">联系电话</label>
+                                    <input type="text" id="owner-phone" class="form-control" placeholder="请输入联系电话">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="problem-description">问题描述</label>
+                            <textarea id="problem-description" class="form-control" rows="3" placeholder="请详细描述车辆问题"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn">保存登记</button>
+                            <button type="reset" class="btn btn-secondary">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 维修单管理内容 -->
+            <div class="card" id="repair-order-management" style="display:none;">
+                <div class="card-header">
+                    <h3>维修单管理</h3>
+                    <div>
+                        <input type="text" class="form-control" style="width:200px; display:inline-block;" placeholder="搜索维修单">
+                        <button class="btn">搜索</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维修单号</th>
+                                <th>车牌号码</th>
+                                <th>车主姓名</th>
+                                <th>维修类型</th>
+                                <th>登记时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WX20230001</td>
+                                <td>京A12345</td>
+                                <td>张三</td>
+                                <td>发动机维修</td>
+                                <td>2023-10-15 09:30</td>
+                                <td><span class="status status-pending">待派工</span></td>
+                                <td>
+                                    <button class="btn" style="padding:4px 8px; font-size:12px;">派工</button>
+                                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;">编辑</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WX20230002</td>
+                                <td>京B56789</td>
+                                <td>李四</td>
+                                <td>刹车系统</td>
+                                <td>2023-10-14 14:20</td>
+                                <td><span class="status status-processing">维修中</span></td>
+                                <td>
+                                    <button class="btn" style="padding:4px 8px; font-size:12px;">查看</button>
+                                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;">编辑</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WX20230003</td>
+                                <td>京C98765</td>
+                                <td>王五</td>
+                                <td>变速箱</td>
+                                <td>2023-10-13 10:15</td>
+                                <td><span class="status status-completed">已完成</span></td>
+                                <td>
+                                    <button class="btn" style="padding:4px 8px; font-size:12px;">验收</button>
+                                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;">编辑</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 其他功能区域，默认隐藏 -->
+            <div id="beauty-maintenance" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>汽车美容保养管理</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>汽车美容保养管理功能区域 - 这里将展示美容保养相关的功能界面</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="financial-management" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>账务管理</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>账务管理功能区域 - 这里将展示财务相关的功能界面</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="parts-management" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>配件管理</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>配件管理功能区域 - 这里将展示配件相关的功能界面</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的导航切换逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            // 主菜单点击事件
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有active类
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    // 给当前项添加active类
+                    this.classList.add('active');
+                    
+                    // 隐藏所有内容区域
+                    document.getElementById('repair-management').style.display = 'none';
+                    document.getElementById('beauty-maintenance').style.display = 'none';
+                    document.getElementById('financial-management').style.display = 'none';
+                    document.getElementById('parts-management').style.display = 'none';
+                    
+                    // 显示对应内容区域
+                    const targetId = this.getAttribute('data-target');
+                    document.getElementById(targetId).style.display = 'block';
+                });
+            });
+            
+            // 子菜单点击事件
+            const submenuItems = document.querySelectorAll('.submenu-item');
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有active类
+                    submenuItems.forEach(i => i.classList.remove('active'));
+                    // 给当前项添加active类
+                    this.classList.add('active');
+                    
+                    // 这里可以添加切换具体功能标签的逻辑
+                    const tabId = this.getAttribute('data-tab');
+                    // 实际应用中会根据tabId显示不同的内容
+                });
+            });
+            
+            // 默认显示维修登记区域
+            document.getElementById('repair-management').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

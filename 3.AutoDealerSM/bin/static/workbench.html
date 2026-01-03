@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车4S店服务管理系统</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .menu {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: #34495e;
+            border-left: 4px solid #3498db;
+        }
+        
+        .submenu {
+            list-style: none;
+            margin-left: 20px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .menu-item.active .submenu {
+            display: block;
+        }
+        
+        .submenu-item {
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submenu-item:hover, .submenu-item.active {
+            background-color: #2c3e50;
+            color: #3498db;
+        }
+        
+        /* 主内容区样式 */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 15px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        /* iframe容器样式 */
+        .iframe-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .iframe-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .form-col {
+                flex: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>汽车4S店服务管理系统</h1>
+            </div>
+            <ul class="menu">
+                <li class="menu-item active" data-target="repair-management">
+                    <span>维修管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item active" data-page="repair-registration.html">维修登记</li>
+                        <li class="submenu-item" data-page="repair-order-management.html">维修单管理</li>
+                        <li class="submenu-item" data-page="acceptance.html">验收</li>
+                        <li class="submenu-item" data-page="settlement.html">结算</li>
+                        <li class="submenu-item" data-page="warranty-claim-entry.html">走保单录入</li>
+                        <li class="submenu-item" data-page="warranty-claim-query.html">走保单查询</li>
+                        <li class="submenu-item" data-page="repair-record.html">维修记录</li>
+                        <li class="submenu-item" data-page="registration-query.html">登记查询</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="beauty-maintenance">
+                    <span>汽车美容保养管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-page="beauty-registration.html">美容保养登记</li>
+                        <li class="submenu-item" data-page="beauty-order-management.html">美容保养单管理</li>
+                        <li class="submenu-item" data-page="beauty-acceptance.html">验收</li>
+                        <li class="submenu-item" data-page="beauty-settlement.html">费用结算</li>
+                        <li class="submenu-item" data-page="beauty-record.html">美容保养记录</li>
+                        <li class="submenu-item" data-page="beauty-registration-query.html">登记查询</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="financial-management">
+                    <span>账务管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-page="repair-settlement.html">维修费用结算</li>
+                        <li class="submenu-item" data-page="beauty-settlement-financial.html">美容保养费用结算</li>
+                        <li class="submenu-item" data-page="expense-query.html">费用查询</li>
+                        <li class="submenu-item" data-page="payable-settlement.html">应付款结算</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-target="parts-management">
+                    <span>配件管理</span>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-page="warehouse-management.html">仓库管理</li>
+                        <li class="submenu-item" data-page="parts-info.html">配件基本信息</li>
+                        <li class="submenu-item" data-page="parts-application.html">配件申请</li>
+                        <li class="submenu-item" data-page="purchase-return.html">进货、退货</li>
+                        <li class="submenu-item" data-page="parts-sales.html">销售</li>
+                        <li class="submenu-item" data-page="parts-settlement.html">结算</li>
+                        <li class="submenu-item" data-page="inventory-query.html">库存查询</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="header">
+                <h2 id="page-title">维修管理 - 维修登记</h2>
+                <div class="user-info">
+                    <span>管理员：张三</span>
+                    <button class="btn btn-secondary">退出系统</button>
+                </div>
+            </div>
+            
+            <!-- iframe容器 -->
+            <div class="iframe-container">
+                <iframe id="content-frame" class="iframe-content" src="repair-registration.html"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面数据
+        const pageTitles = {
+            // 维修管理
+            'repair-registration.html': '维修管理 - 维修登记',
+            'repair-order-management.html': '维修管理 - 维修单管理',
+            'acceptance.html': '维修管理 - 验收',
+            'settlement.html': '维修管理 - 结算',
+            'warranty-claim-entry.html': '维修管理 - 走保单录入',
+            'warranty-claim-query.html': '维修管理 - 走保单查询',
+            'repair-record.html': '维修管理 - 维修记录',
+            'registration-query.html': '维修管理 - 登记查询',
+            
+            // 汽车美容保养管理
+            'beauty-registration.html': '汽车美容保养管理 - 美容保养登记',
+            'beauty-order-management.html': '汽车美容保养管理 - 美容保养单管理',
+            'beauty-acceptance.html': '汽车美容保养管理 - 验收',
+            'beauty-settlement.html': '汽车美容保养管理 - 费用结算',
+            'beauty-record.html': '汽车美容保养管理 - 美容保养记录',
+            'beauty-registration-query.html': '汽车美容保养管理 - 登记查询',
+            
+            // 账务管理
+            'repair-settlement.html': '账务管理 - 维修费用结算',
+            'beauty-settlement-financial.html': '账务管理 - 美容保养费用结算',
+            'expense-query.html': '账务管理 - 费用查询',
+            'payable-settlement.html': '账务管理 - 应付款结算',
+            
+            // 配件管理
+            'warehouse-management.html': '配件管理 - 仓库管理',
+            'parts-info.html': '配件管理 - 配件基本信息',
+            'parts-application.html': '配件管理 - 配件申请',
+            'purchase-return.html': '配件管理 - 进货、退货',
+            'parts-sales.html': '配件管理 - 销售',
+            'parts-settlement.html': '配件管理 - 结算',
+            'inventory-query.html': '配件管理 - 库存查询'
+        };
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const submenuItems = document.querySelectorAll('.submenu-item');
+            const contentFrame = document.getElementById('content-frame');
+            const pageTitle = document.getElementById('page-title');
+            
+            // 主菜单点击事件
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有active类
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    // 给当前项添加active类
+                    this.classList.add('active');
+                    
+                    // 如果当前菜单项有子菜单，显示第一个子菜单项对应的页面
+                    const submenu = this.querySelector('.submenu');
+                    if (submenu) {
+                        const firstSubmenuItem = submenu.querySelector('.submenu-item');
+                        if (firstSubmenuItem) {
+                            // 移除所有子菜单项的active类
+                            submenuItems.forEach(i => i.classList.remove('active'));
+                            // 给第一个子菜单项添加active类
+                            firstSubmenuItem.classList.add('active');
+                            
+                            // 加载对应的页面
+                            const page = firstSubmenuItem.getAttribute('data-page');
+                            contentFrame.src = page;
+                            pageTitle.textContent = pageTitles[page] || '汽车4S店服务管理系统';
+                        }
+                    }
+                });
+            });
+            
+            // 子菜单点击事件
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    
+                    // 移除所有子菜单项的active类
+                    submenuItems.forEach(i => i.classList.remove('active'));
+                    // 给当前项添加active类
+                    this.classList.add('active');
+                    
+                    // 加载对应的页面
+                    const page = this.getAttribute('data-page');
+                    contentFrame.src = page;
+                    pageTitle.textContent = pageTitles[page] || '汽车4S店服务管理系统';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
